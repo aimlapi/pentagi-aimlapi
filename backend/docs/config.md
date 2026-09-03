@@ -30,6 +30,7 @@ This document serves as a comprehensive guide to the configuration system in Pen
   - [Web Scraper Settings](#web-scraper-settings)
     - [Usage Details](#usage-details-5)
   - [LLM Provider Settings](#llm-provider-settings)
+    - [aimlapi.com LLM Provider](#aimlapicom-llm-provider)
     - [OpenAI](#openai)
     - [Anthropic](#anthropic)
     - [Ollama LLM Provider](#ollama-llm-provider)
@@ -40,7 +41,6 @@ This document serves as a comprehensive guide to the configuration system in Pen
     - [Kimi LLM Provider](#kimi-llm-provider)
     - [Qwen LLM Provider](#qwen-llm-provider)
     - [MiniMax LLM Provider](#minimax-llm-provider)
-    - [aimlapi.com LLM Provider](#aimlapicom-llm-provider)
     - [Custom LLM Provider](#custom-llm-provider)
     - [Usage Details](#usage-details-6)
   - [Embedding Settings](#embedding-settings)
@@ -713,6 +713,25 @@ The scraper settings enable critical functionality:
 
 These settings control the integration with various Large Language Model (LLM) providers, including OpenAI, Anthropic, and custom providers.
 
+### aimlapi.com LLM Provider
+
+| Option           | Environment Variable | Default Value                | Description                                             |
+| ---------------- | -------------------- | ---------------------------- | ------------------------------------------------------- |
+| AIMLAPIKey       | `AIMLAPI_API_KEY`    | *(none)*                     | aimlapi.com API key for authentication                  |
+| AIMLAPIServerURL | `AIMLAPI_SERVER_URL` | `https://api.aimlapi.com/v1` | aimlapi.com API endpoint URL                            |
+| AIMLAPIProvider  | `AIMLAPI_PROVIDER`   | *(none)*                     | Provider name prefix for LiteLLM integration (optional) |
+
+aimlapi.com is an aggregator: one OpenAI-compatible endpoint fronting 350+ chat
+models from many vendors. Model ids are vendor-namespaced (`deepseek/deepseek-v4-flash`)
+and are sent verbatim.
+
+Requests to `api.aimlapi.com` carry `HTTP-Referer`, `X-Title`, `X-AIMLAPI-Source`
+and `X-AIMLAPI-Partner-ID` identifying PentAGI as the calling application. Those
+headers are scoped to that host: pointing `AIMLAPI_SERVER_URL` at a proxy or a
+self-hosted gateway disables them instead of tagging another operator's traffic.
+
+**LiteLLM Integration**: Set `AIMLAPI_PROVIDER=aimlapi` to enable model prefixing when using LiteLLM proxy with default PentAGI configs.
+
 ### OpenAI
 
 | Option          | Environment Variable | Default Value               | Description                        |
@@ -837,25 +856,6 @@ There is no `VERTEX_API_KEY` or `GOOGLE_APPLICATION_CREDENTIALS` variable wired 
 | MiniMaxProvider  | `MINIMAX_PROVIDER`   | *(none)*                    | Provider name prefix for LiteLLM integration (optional) |
 
 **LiteLLM Integration**: Set `MINIMAX_PROVIDER=minimax` to enable model prefixing (e.g., `minimax/MiniMax-M3`) when using LiteLLM proxy with default PentAGI configs.
-
-### aimlapi.com LLM Provider
-
-| Option           | Environment Variable | Default Value                | Description                                             |
-| ---------------- | -------------------- | ---------------------------- | ------------------------------------------------------- |
-| AIMLAPIKey       | `AIMLAPI_API_KEY`    | *(none)*                     | aimlapi.com API key for authentication                  |
-| AIMLAPIServerURL | `AIMLAPI_SERVER_URL` | `https://api.aimlapi.com/v1` | aimlapi.com API endpoint URL                            |
-| AIMLAPIProvider  | `AIMLAPI_PROVIDER`   | *(none)*                     | Provider name prefix for LiteLLM integration (optional) |
-
-aimlapi.com is an aggregator: one OpenAI-compatible endpoint fronting 350+ chat
-models from many vendors. Model ids are vendor-namespaced (`deepseek/deepseek-v4-flash`)
-and are sent verbatim.
-
-Requests to `api.aimlapi.com` carry `HTTP-Referer`, `X-Title`, `X-AIMLAPI-Source`
-and `X-AIMLAPI-Partner-ID` identifying PentAGI as the calling application. Those
-headers are scoped to that host: pointing `AIMLAPI_SERVER_URL` at a proxy or a
-self-hosted gateway disables them instead of tagging another operator's traffic.
-
-**LiteLLM Integration**: Set `AIMLAPI_PROVIDER=aimlapi` to enable model prefixing when using LiteLLM proxy with default PentAGI configs.
 
 ### Custom LLM Provider
 

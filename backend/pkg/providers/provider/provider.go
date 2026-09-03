@@ -67,6 +67,7 @@ const (
 // AllProviderTypes enumerates every supported provider type; keep it in sync with
 // the consts above. The API-layer type whitelist validates against it.
 var AllProviderTypes = ProvidersListTypes{
+	ProviderAIMLAPI,
 	ProviderOpenAI,
 	ProviderAnthropic,
 	ProviderGemini,
@@ -78,7 +79,6 @@ var AllProviderTypes = ProvidersListTypes{
 	ProviderKimi,
 	ProviderQwen,
 	ProviderMiniMax,
-	ProviderAIMLAPI,
 }
 
 type ProviderName string

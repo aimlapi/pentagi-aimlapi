@@ -46,6 +46,14 @@ func fromData(
 
 var providerRegistry = []registryEntry{
 	{
+		Type:        provider.ProviderAIMLAPI,
+		Name:        provider.DefaultProviderNameAIMLAPI,
+		Enabled:     func(c *config.Config) bool { return c.AIMLAPIKey != "" },
+		NewConfig:   ignoreConfig(aimlapi.DefaultProviderConfig),
+		New:         aimlapi.New,
+		BuildConfig: fromData(aimlapi.BuildProviderConfig),
+	},
+	{
 		Type:        provider.ProviderOpenAI,
 		Name:        provider.DefaultProviderNameOpenAI,
 		Enabled:     func(c *config.Config) bool { return c.OpenAIKey != "" },
@@ -138,14 +146,6 @@ var providerRegistry = []registryEntry{
 		NewConfig:   ignoreConfig(minimax.DefaultProviderConfig),
 		New:         minimax.New,
 		BuildConfig: fromData(minimax.BuildProviderConfig),
-	},
-	{
-		Type:        provider.ProviderAIMLAPI,
-		Name:        provider.DefaultProviderNameAIMLAPI,
-		Enabled:     func(c *config.Config) bool { return c.AIMLAPIKey != "" },
-		NewConfig:   ignoreConfig(aimlapi.DefaultProviderConfig),
-		New:         aimlapi.New,
-		BuildConfig: fromData(aimlapi.BuildProviderConfig),
 	},
 }
 
