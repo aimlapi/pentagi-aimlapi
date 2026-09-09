@@ -2,6 +2,7 @@ package providers
 
 import (
 	"pentagi/pkg/config"
+	"pentagi/pkg/providers/aimlapi"
 	"pentagi/pkg/providers/anthropic"
 	"pentagi/pkg/providers/bedrock"
 	"pentagi/pkg/providers/custom"
@@ -44,6 +45,14 @@ func fromData(
 }
 
 var providerRegistry = []registryEntry{
+	{
+		Type:        provider.ProviderAIMLAPI,
+		Name:        provider.DefaultProviderNameAIMLAPI,
+		Enabled:     func(c *config.Config) bool { return c.AIMLAPIKey != "" },
+		NewConfig:   ignoreConfig(aimlapi.DefaultProviderConfig),
+		New:         aimlapi.New,
+		BuildConfig: fromData(aimlapi.BuildProviderConfig),
+	},
 	{
 		Type:        provider.ProviderOpenAI,
 		Name:        provider.DefaultProviderNameOpenAI,
